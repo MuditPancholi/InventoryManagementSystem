@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Login - IMS</title>
+</head>
+<body>
+    <div class="login-container">
+        <form id="loginForm">
+            <input type="text" id="username" placeholder="Username" required>
+            <input type="password" id="password" placeholder="Password" required>
+            <select id="roleSelect" required>
+                <option value="" disabled selected>Select your role</option>
+                <option value="admin">Administrator</option>
+                <option value="employee">Employee</option>
+                <option value="user">User</option>
+                <option value="supplier">Supplier</option>
+            </select>
+            <button type="submit">Login</button>
+        </form>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const loginForm = document.getElementById('loginForm');
+            if (loginForm) {
+                loginForm.addEventListener('submit', function(event) {
+                    event.preventDefault();
+                    console.log("Form submitted, but prevented page refresh.");
+                    
+                    // Simple test output to confirm no refresh
+                    alert("Login form submitted successfully without refresh!");
+                });
+            }
+        });
+    </script>
+</body>
+</html>

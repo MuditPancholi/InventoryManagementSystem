@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Low Stock Items - IMS</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        /* Custom styles for low stock page */
+        body {
+            background: linear-gradient(45deg, #8b0000, #a52a2a);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .content-wrapper {
+            padding: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .low-stock-header {
+            background: rgba(139, 0, 0, 0.3);
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            backdrop-filter: blur(10px);
+        }
+
+        .back-button {
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            color: white;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .back-button:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+        }
+
+        .low-stock-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 20px;
+            padding: 20px 0;
+        }
+
+        .stock-card {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 15px;
+            border: 1px solid rgba(255, 107, 107, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .stock-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(255, 107, 107, 0.2);
+        }
+
+        .item-image {
+            height: 120px;
+            width: 100%;
+            border-radius: 10px;
+            overflow: hidden;
+            margin-bottom: 10px;
+        }
+
+        .item-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            transition: transform 0.3s ease;
+        }
+
+        .stock-card:hover .item-image img {
+            transform: scale(1.1);
+        }
+
+        .item-info {
+            color: white;
+        }
+
+        .item-info h3 {
+            margin: 5px 0;
+            font-size: 1em;
+        }
+
+        .stock-level {
+            color: #ff6b6b;
+            font-weight: bold;
+            font-size: 0.9em;
+        }
+
+        .price {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 0.9em;
+        }
+
+        .warning-badge {
+            background: rgba(255, 107, 107, 0.2);
+            color: #ff6b6b;
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-size: 0.8em;
+            display: inline-block;
+            margin-top: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="content-wrapper">
+        <div class="low-stock-header">
+            <h1>Low Stock Items</h1>
+            <button onclick="window.location.href='admin-dashboard.html'" class="back-button">
+                <i class="fas fa-arrow-left"></i> Back to Dashboard
+            </button>
+        </div>
+
+        <div class="low-stock-grid" id="lowStockGrid">
+            <!-- Low stock items will be loaded here -->
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            loadLowStockItems();
+        });
+
+        function loadLowStockItems() {
+            const inventory = JSON.parse(localStorage.getItem('inventory')) || [];
+            const lowStockItems = inventory.filter(item => item.quantity > 0 && item.quantity <= 5);
+            const grid = document.getElementById('lowStockGrid');
+
+            if (lowStockItems.length === 0) {
+                grid.innerHTML = '<p class="no-data">No low stock items found</p>';
+                return;
+            }
+
+            grid.innerHTML = lowStockItems.map(item => `
+                <div class="stock-card">
+                    <div class="item-image">
+                        <img src="${item.image || 'placeholder.png'}" alt="${item.name}">
+                    </div>
+                    <div class="item-info">
+                        <h3>${item.name}</h3>
+                        <p class="stock-level">Stock: ${item.quantity}</p>
+                        <p class="price">Price: $${item.price.toFixed(2)}</p>
+                        <span class="warning-badge">Low Stock</span>
+                    </div>
+                    <div class="item-actions">
+                        <button onclick="reorderItem(${item.id})" class="btn btn-primary">
+                            <i class="fas fa-sync-alt"></i> Reorder
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function reorderItem(itemId) {
+            // Add reorder functionality here
+            alert('Reorder functionality will be implemented here');
+        }
+    </script>
+</body>
+</html> 

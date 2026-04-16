@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analysis Dashboard - IMS</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body onload="initializeAnalysis()">
+    <div class="dashboard-container">
+        <aside class="sidebar">
+            <div class="user-info">
+                <div class="user-avatar">
+                    <i class="fas fa-user-circle"></i>
+                </div>
+                <h3 id="userFullName"></h3>
+                <p id="userRole"></p>
+            </div>
+            <nav id="roleBasedMenu" class="nav-menu">
+                <!-- Menu will be populated by JavaScript -->
+            </nav>
+        </aside>
+        
+        <main class="dashboard-content">
+            <header class="content-header">
+                <h1>Analysis Dashboard</h1>
+                <div class="header-actions">
+                    <button class="btn btn-primary" onclick="exportReport()">
+                        <i class="fas fa-download"></i> Export Report
+                    </button>
+                </div>
+            </header>
+
+            <!-- Role-specific analysis sections -->
+            <div class="analysis-grid">
+                <!-- Admin-specific analysis -->
+                <div data-permission="view_reports" class="chart-card admin-view">
+                    <h3>Overall System Performance</h3>
+                    <canvas id="systemPerformanceChart"></canvas>
+                </div>
+                
+                <!-- User-specific analysis -->
+                <div data-permission="view_own_transactions" class="chart-card user-view">
+                    <h3>My Transaction History</h3>
+                    <canvas id="userTransactionChart"></canvas>
+                </div>
+                
+                <!-- Supplier-specific analysis -->
+                <div data-permission="manage_own_products" class="chart-card supplier-view">
+                    <h3>Supply Performance</h3>
+                    <canvas id="supplyPerformanceChart"></canvas>
+                </div>
+
+                <!-- Common analysis for all roles -->
+                <div class="chart-card">
+                    <h3>Stock Status</h3>
+                    <canvas id="stockStatusChart"></canvas>
+                </div>
+            </div>
+
+            <!-- Role-specific metrics -->
+            <div class="metrics-section">
+                <!-- Admin metrics -->
+                <div data-permission="view_reports" class="metrics-grid admin-view">
+                    <div class="metric-card">
+                        <h4>Total Revenue</h4>
+                        <p class="metric-value">$50,234</p>
+                        <p class="metric-change positive">+15% from last month</p>
+                    </div>
+                    <div class="metric-card">
+                        <h4>System Users</h4>
+                        <p class="metric-value">156</p>
+                        <p class="metric-change positive">+5 new this month</p>
+                    </div>
+                </div>
+
+                <!-- User metrics -->
+                <div data-permission="view_own_transactions" class="metrics-grid user-view">
+                    <div class="metric-card">
+                        <h4>My Transactions</h4>
+                        <p class="metric-value">45</p>
+                        <p class="metric-change neutral">Same as last month</p>
+                    </div>
+                    <div class="metric-card">
+                        <h4>Items Managed</h4>
+                        <p class="metric-value">123</p>
+                        <p class="metric-change positive">+12 this month</p>
+                    </div>
+                </div>
+
+                <!-- Supplier metrics -->
+                <div data-permission="manage_own_products" class="metrics-grid supplier-view">
+                    <div class="metric-card">
+                        <h4>Supply Orders</h4>
+                        <p class="metric-value">28</p>
+                        <p class="metric-change positive">+8 from last month</p>
+                    </div>
+                    <div class="metric-card">
+                        <h4>Delivery Rate</h4>
+                        <p class="metric-value">98%</p>
+                        <p class="metric-change positive">+2% improvement</p>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="script.js"></script>
+    <script>
+        function initializeAnalysis() {
+            const session = validateSession();
+            if (!session) return;
+
+            // Populate menu based on role
+            populateMenu(session.role);
+            
+            // Initialize charts based on role
+            initializeCharts(session.role);
+        }
+
+        function initializeCharts(role) {
+            // Common chart for all roles
+            initializeStockStatusChart();
+
+            // Role-specific charts
+            switch(role) {
+                case ROLES.ADMIN:
+                    initializeAdminCharts();
+                    break;
+                case ROLES.USER:
+                    initializeUserCharts();
+                    break;
+                case ROLES.SUPPLIER:
+                    initializeSupplierCharts();
+                    break;
+            }
+        }
+
+        function exportReport() {
+            // Implementation for report export
+            alert('Generating report...');
+        }
+
+        // Add chart initialization functions here...
+    </script>
+</body>
+</html>

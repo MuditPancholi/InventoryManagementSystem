@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inventory Management System</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-brand">
+            <i class="fas fa-boxes"></i>
+            <span>IMS</span>
+        </div>
+        <ul class="nav-links">
+            <li><a href="index.html" class="active">Home</a></li>
+            <li class="nav-auth">
+                <a href="login.html" class="nav-btn login-btn">
+                    <i class="fas fa-sign-in-alt"></i> Login
+                </a>
+                <a href="register.html" class="nav-btn register-btn">
+                    <i class="fas fa-user-plus"></i> Register
+                </a>
+            </li>
+        </ul>
+        <div class="hamburger">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+    </nav>
+
+    <div class="container">
+        <header class="hero-section">
+            <h1>Inventory Management System</h1>
+            <p class="hero-text">Streamline your business operations with our powerful inventory solution</p>
+        </header>
+        
+        <main class="landing-content">
+            <!-- Updated Role-based Features Section -->
+            <div class="roles-section">
+                <h2>Choose Your Role</h2>
+                <div class="role-cards">
+                    <div class="role-card" onclick="toggleRoleActions(this)">
+                        <i class="fas fa-user-shield"></i>
+                        <h3>Admin</h3>
+                        <ul>
+                            <li>Manage Users & Permissions</li>
+                            <li>System Configuration</li>
+                            <li>Generate Reports</li>
+                            <li>Monitor Performance</li>
+                        </ul>
+                        <div class="role-actions" style="display: none;">
+                            <a href="login.html?role=admin" class="btn btn-primary">Login</a>
+                            <a href="register.html?role=admin" class="btn btn-secondary">Register</a>
+                        </div>
+                    </div>
+
+                    <div class="role-card" onclick="toggleRoleActions(this)">
+                        <i class="fas fa-user-tie"></i>
+                        <h3>Employee</h3>
+                        <ul>
+                            <li>Manage Inventory</li>
+                            <li>Process Orders</li>
+                            <li>Track Stock</li>
+                            <li>Generate Basic Reports</li>
+                        </ul>
+                        <div class="role-actions" style="display: none;">
+                            <a href="login.html?role=employee" class="btn btn-primary">Login as Employee</a>
+                            <a href="register.html?role=employee" class="btn btn-secondary">Register as Employee</a>
+                        </div>
+                    </div>
+
+                    <div class="role-card" onclick="toggleRoleActions(this)">
+                        <i class="fas fa-user"></i>
+                        <h3>User</h3>
+                        <ul>
+                            <li>View Products</li>
+                            <li>Place Orders</li>
+                            <li>Track Orders</li>
+                            <li>View History</li>
+                        </ul>
+                        <div class="role-actions" style="display: none;">
+                            <a href="login.html?role=user" class="btn btn-primary">Login as User</a>
+                            <a href="register.html?role=user" class="btn btn-secondary">Register as User</a>
+                        </div>
+                    </div>
+
+                    <div class="role-card" onclick="toggleRoleActions(this)">
+                        <i class="fas fa-truck"></i>
+                        <h3>Supplier</h3>
+                        <ul>
+                            <li>Manage Products</li>
+                            <li>Track Supply Orders</li>
+                            <li>Update Stock</li>
+                            <li>View Performance</li>
+                        </ul>
+                        <div class="role-actions" style="display: none;">
+                            <a href="login.html?role=supplier" class="btn btn-primary">Login as Supplier</a>
+                            <a href="register.html?role=supplier" class="btn btn-secondary">Register as Supplier</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- System Features -->
+            <div class="features-grid">
+                <div class="feature-card">
+                    <i class="fas fa-chart-line"></i>
+                    <h3>Real-time Tracking</h3>
+                    <p>Monitor inventory levels and movements in real-time</p>
+                </div>
+                <div class="feature-card">
+                    <i class="fas fa-exchange-alt"></i>
+                    <h3>Transaction Management</h3>
+                    <p>Easily manage stock ins and outs with detailed logging</p>
+                </div>
+                <div class="feature-card">
+                    <i class="fas fa-bell"></i>
+                    <h3>Alert System</h3>
+                    <p>Get notified about low stock and critical inventory levels</p>
+                </div>
+                <div class="feature-card">
+                    <i class="fas fa-chart-bar"></i>
+                    <h3>Analytics</h3>
+                    <p>Comprehensive reports and performance analytics</p>
+                </div>
+            </div>
+
+            <!-- Call to Action -->
+            <div class="cta-section">
+                <h2>Get Started Today</h2>
+                <p>Join thousands of businesses managing their inventory efficiently</p>
+                <div class="cta-buttons">
+                    <a href="register.html" class="btn btn-primary">Create Account</a>
+                    <a href="login.html" class="btn btn-secondary">Login</a>
+                </div>
+            </div>
+
+            <!-- System Stats -->
+            <div class="stats-section">
+                <div class="stat-item">
+                    <h3>1000+</h3>
+                    <p>Active Users</p>
+                </div>
+                <div class="stat-item">
+                    <h3>50,000+</h3>
+                    <p>Products Managed</p>
+                </div>
+                <div class="stat-item">
+                    <h3>99.9%</h3>
+                    <p>System Uptime</p>
+                </div>
+                <div class="stat-item">
+                    <h3>24/7</h3>
+                    <p>Support</p>
+                </div>
+            </div>
+
+            <!-- Add this button just before the footer in index.html -->
+            <div class="admin-controls">
+                <button onclick="clearLocalStorage()" class="btn btn-danger">
+                    <i class="fas fa-trash-alt"></i> Clear System Data
+                </button>
+                <button onclick="clearAllData()" class="btn btn-danger">
+                    <i class="fas fa-trash-alt"></i> Clear All Data
+                </button>
+            </div>
+
+            <!-- Add this section just before the footer in index.html -->
+            <div class="system-controls">
+                <div class="control-card">
+                    <h3><i class="fas fa-cog"></i> System Controls</h3>
+                    <div class="control-buttons">
+                        <button onclick="clearAllData()" class="btn btn-danger">
+                            <i class="fas fa-trash-alt"></i> Clear All Data
+                        </button>
+                        <button onclick="resetSystem()" class="btn btn-warning">
+                            <i class="fas fa-redo"></i> Reset System
+                        </button>
+                    </div>
+                    <p class="warning-text">Warning: These actions cannot be undone!</p>
+                </div>
+            </div>
+        </main>
+
+        <footer>
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="about.html">About Us</a></li>
+                        <li><a href="contact.html">Contact</a></li>
+                        <li><a href="privacy.html">Privacy Policy</a></li>
+                        <li><a href="terms.html">Terms of Service</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Contact Us</h4>
+                    <p><i class="fas fa-envelope"></i> support@ims.com</p>
+                    <p><i class="fas fa-phone"></i> +1 234 567 8900</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Follow Us</h4>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-facebook"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-linkedin"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 Inventory Management System. All rights reserved.</p>
+            </div>
+        </footer>
+    </div>
+    
+    <script>
+        function toggleRoleActions(card) {
+            // Hide all other role actions first
+            document.querySelectorAll('.role-actions').forEach(actions => {
+                if (actions !== card.querySelector('.role-actions')) {
+                    actions.style.display = 'none';
+                }
+            });
+
+            // Toggle the clicked card's actions
+            const actions = card.querySelector('.role-actions');
+            if (actions.style.display === 'none') {
+                actions.style.display = 'flex';
+                actions.style.flexDirection = 'column';
+                actions.style.gap = '10px';
+            } else {
+                actions.style.display = 'none';
+            }
+        }
+
+        // Close role actions when clicking outside
+        document.addEventListener('click', function(event) {
+            if (!event.target.closest('.role-card')) {
+                document.querySelectorAll('.role-actions').forEach(actions => {
+                    actions.style.display = 'none';
+                });
+            }
+        });
+
+        // Mobile menu toggle
+        document.querySelector('.hamburger').addEventListener('click', function() {
+            this.classList.toggle('active');
+            document.querySelector('.nav-links').classList.toggle('active');
+        });
+
+        // Add this script to handle role-based navigation
+        function navigateToRole(role) {
+            // Clear any existing session
+            localStorage.removeItem('currentSession');
+            
+            // Redirect to login page with role parameter
+            window.location.href = `login.html?role=${role}`;
+        }
+
+        // Add onclick handlers to your role buttons/cards
+        // Example: <button onclick="navigateToRole('admin')">Admin</button>
+    </script>
+</body>
+</html>

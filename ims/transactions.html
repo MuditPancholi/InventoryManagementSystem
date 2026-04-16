@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Transactions - IMS</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body onload="initializeTransactions()">
+    <div class="dashboard-container">
+        <aside class="sidebar">
+            <div class="user-info">
+                <div class="user-avatar">
+                    <i class="fas fa-user-circle"></i>
+                </div>
+                <h3 id="userFullName"></h3>
+                <p id="userRole"></p>
+            </div>
+            <nav id="roleBasedMenu" class="nav-menu">
+                <!-- Menu will be populated by JavaScript -->
+            </nav>
+        </aside>
+        
+        <main class="dashboard-content">
+            <header class="content-header">
+                <h1>Transactions</h1>
+                <div class="header-actions" data-permission="create_transaction">
+                    <button class="btn btn-primary" onclick="openTransactionModal()">
+                        <i class="fas fa-plus"></i> New Transaction
+                    </button>
+                </div>
+            </header>
+
+            <div class="filters-section">
+                <input type="text" id="searchTransaction" placeholder="Search transactions..." class="search-input">
+                <select id="typeFilter" class="filter-select">
+                    <option value="">All Types</option>
+                    <option value="inbound">Inbound</option>
+                    <option value="outbound">Outbound</option>
+                </select>
+                <input type="date" id="dateFilter" class="filter-select">
+            </div>
+
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Date</th>
+                            <th>Type</th>
+                            <th>Product</th>
+                            <th>Quantity</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="transactionsTableBody">
+                        <!-- Will be populated by JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+        </main>
+    </div>
+
+    <!-- Transaction Modal -->
+    <div id="transactionModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>New Transaction</h2>
+            <form id="transactionForm" onsubmit="handleTransactionSubmit(event)">
+                <div class="form-group">
+                    <label for="transactionType">Type</label>
+                    <select id="transactionType" required>
+                        <option value="inbound">Inbound</option>
+                        <option value="outbound">Outbound</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="productSelect">Product</label>
+                    <select id="productSelect" required>
+                        <!-- Will be populated by JavaScript -->
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="quantity">Quantity</label>
+                    <input type="number" id="quantity" required min="1">
+                </div>
+                <div class="form-group">
+                    <label for="notes">Notes</label>
+                    <textarea id="notes" rows="3"></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary">Submit Transaction</button>
+            </form>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

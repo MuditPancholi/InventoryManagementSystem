@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register - IMS</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        /* Custom styles for role selector */
+        .role-selection {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+        }
+
+        .role-selection h2 {
+            color: #4CAF50;
+            margin-bottom: 20px;
+            font-size: 1.5em;
+        }
+
+        .custom-select {
+            position: relative;
+            width: 100%;
+            max-width: 400px;
+            margin: 0 auto;
+        }
+
+        .custom-select select {
+            appearance: none;
+            -webkit-appearance: none;
+            width: 100%;
+            padding: 15px 20px;
+            font-size: 1.1em;
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .custom-select select:focus {
+            outline: none;
+            border-color: #4CAF50;
+            background: rgba(255, 255, 255, 0.15);
+            box-shadow: 0 0 0 2px rgba(76, 175, 80, 0.2);
+        }
+
+        .custom-select select option {
+            background: #1a237e;
+            color: white;
+            padding: 15px;
+        }
+
+        .custom-select select option:hover {
+            background: #4CAF50;
+        }
+
+        .select-icon {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            pointer-events: none;
+            color: #4CAF50;
+            transition: all 0.3s ease;
+        }
+
+        .custom-select select:focus + .select-icon {
+            transform: translateY(-50%) rotate(180deg);
+        }
+
+        /* Style for the dropdown when opened */
+        .custom-select select:focus option {
+            background: #1a237e;
+            color: white;
+            padding: 15px;
+        }
+
+        /* Add hover effect */
+        .custom-select:hover select {
+            background: rgba(255, 255, 255, 0.15);
+            border-color: rgba(76, 175, 80, 0.5);
+        }
+
+        body {
+            padding-top: 70px; /* Add padding for navbar */
+        }
+
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: rgba(11, 41, 66, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .nav-brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: white;
+            text-decoration: none;
+        }
+
+        .nav-brand i {
+            font-size: 1.5em;
+            color: #4CAF50;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            transition: color 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .nav-links a:hover {
+            color: #4CAF50;
+        }
+
+        .nav-links i {
+            font-size: 1.1em;
+        }
+    </style>
+</head>
+<body>
+    <!-- Add navbar -->
+    <nav class="navbar">
+        <a href="index.html" class="nav-brand">
+            <i class="fas fa-boxes"></i>
+            <span>IMS</span>
+        </a>
+        <ul class="nav-links">
+            <li><a href="index.html"><i class="fas fa-home"></i> Home</a></li>
+            <li><a href="login.html"><i class="fas fa-sign-in-alt"></i> Login</a></li>
+        </ul>
+    </nav>
+
+    <div class="container">
+        <header>
+            <h1>Create Account</h1>
+        </header>
+        
+        <main class="form-content">
+            <div class="form-card">
+                <!-- Role Selection Section -->
+                <div class="role-selection">
+                    <h2>Register as</h2>
+                    <div class="custom-select">
+                        <select id="selectedRole" name="role" required>
+                            <option value="" disabled selected>Select your role</option>
+                            <option value="admin">Admin - System Management</option>
+                            <option value="employee">Employee - Inventory Control</option>
+                            <option value="user">User - Basic Access</option>
+                            <option value="supplier">Supplier - Supply Management</option>
+                        </select>
+                        <div class="select-icon">
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="errorContainer" class="error-message" style="display: none;">
+                    <i class="fas fa-exclamation-circle"></i>
+                    <span id="errorText"></span>
+                </div>
+
+                <form id="registerForm">
+                    <input type="hidden" id="selectedRole" name="role">
+                    <div class="form-group">
+                        <label for="username">Username</label>
+                        <input type="text" id="username" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="password">Password</label>
+                        <input type="password" id="password" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="confirmPassword">Confirm Password</label>
+                        <input type="password" id="confirmPassword" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Register</button>
+                </form>
+                <p class="form-footer">
+                    Already have an account? 
+                    <a href="#" onclick="redirectToLogin()" class="login-link">Login here</a>
+                </p>
+            </div>
+        </main>
+    </div>
+
+    <script src="script.js"></script>
+    <script>
+        function redirectToLogin() {
+            const role = document.getElementById('selectedRole').value;
+            window.location.href = `login.html${role ? '?role=' + role : ''}`;
+        }
+
+        // Update the registration form handler
+        document.getElementById('registerForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+            const role = document.getElementById('selectedRole').value;
+
+            // Validate role selection
+            if (!role) {
+                alert('Please select a role');
+                return;
+            }
+
+            // Validate passwords match
+            if (password !== confirmPassword) {
+                alert('Passwords do not match');
+                return;
+            }
+
+            // Get existing users without clearing them
+            let users = JSON.parse(localStorage.getItem('users')) || [];
+
+            // Check if username exists
+            if (users.some(u => u.username.toLowerCase() === username.toLowerCase())) {
+                alert('Username already exists');
+                return;
+            }
+
+            // Create new user with proper ID format
+            const newUser = {
+                id: Date.now(), // Unique timestamp ID
+                username: username,
+                password: password,
+                role: role,
+                isApproved: true,
+                createdAt: new Date().toISOString()
+            };
+
+            // Add to users array without removing existing users
+            users.push(newUser);
+            localStorage.setItem('users', JSON.stringify(users));
+            console.log('Updated users:', users); // Debug log
+
+            // Show success message and redirect
+            alert('Registration successful! Redirecting to login...');
+            window.location.href = 'login.html';
+        });
+
+        // Get role from URL if present
+        window.addEventListener('load', function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const role = urlParams.get('role');
+            if (role) {
+                const roleSelect = document.getElementById('selectedRole');
+                if (roleSelect) {
+                    roleSelect.value = role;
+                }
+            }
+        });
+    </script>
+</body>
+</html>

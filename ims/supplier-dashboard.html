@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Supplier Dashboard - IMS</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        /* Add these styles in the head section */
+        .dashboard-container {
+            margin-top: 70px; /* Add margin to push content below navbar */
+        }
+
+        .sidebar {
+            position: fixed;
+            top: 70px; /* Start sidebar below navbar */
+            left: 0;
+            height: calc(100vh - 70px); /* Adjust height to account for navbar */
+            width: 250px;
+            background: rgba(70, 70, 70, 0.95);
+            backdrop-filter: blur(10px);
+            border-right: 1px solid rgba(255, 255, 255, 0.1);
+            z-index: 100;
+            overflow-y: auto;
+        }
+
+        .dashboard-content {
+            margin-left: 250px;
+            padding: 20px;
+            min-height: calc(100vh - 70px);
+        }
+
+        .top-navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+        }
+    </style>
+</head>
+<body onload="initializeSupplierDashboard()">
+    <!-- Add navbar at the top -->
+    <nav class="top-navbar">
+        <div class="nav-logo" onclick="window.location.href='index.html'">
+            <img src="https://cdn-icons-png.flaticon.com/512/9715/9715374.png" alt="IMS Logo" class="logo-spin">
+            <div class="logo-text">
+                <span class="logo-title glow">IMS</span>
+            </div>
+        </div>
+    </nav>
+
+    <div class="dashboard-container">
+        <aside class="sidebar">
+            <div class="user-info">
+                <div class="user-avatar">
+                    <i class="fas fa-user-circle"></i>
+                </div>
+                <h3 id="userFullName"></h3>
+                <p id="userRole">Supplier</p>
+            </div>
+            <nav class="nav-menu">
+                <ul>
+                    <li><a href="#" class="active" onclick="showSection('dashboard')">
+                        <i class="fas fa-home"></i> Dashboard</a>
+                    </li>
+                    <li><a href="#" onclick="showSection('products')">
+                        <i class="fas fa-boxes"></i> My Products</a>
+                    </li>
+                    <li><a href="#" onclick="showSection('orders')">
+                        <i class="fas fa-shopping-cart"></i> Supply Orders</a>
+                    </li>
+                    <li><a href="#" onclick="logout()">
+                        <i class="fas fa-sign-out-alt"></i> Logout</a>
+                    </li>
+                </ul>
+            </nav>
+        </aside>
+        
+        <main class="dashboard-content">
+            <header class="content-header">
+                <h1>Supplier Dashboard</h1>
+                <div class="header-actions">
+                    <button onclick="openAddProductModal()" class="btn btn-primary">
+                        <i class="fas fa-plus"></i> Add Product
+                    </button>
+                </div>
+            </header>
+
+            <!-- Supply Orders -->
+            <div class="dashboard-section">
+                <h2>Pending Supply Orders</h2>
+                <div class="orders-list" id="pendingOrders">
+                    <!-- Orders will be populated by JavaScript -->
+                </div>
+            </div>
+
+            <!-- My Products -->
+            <div class="dashboard-section">
+                <h2>My Products</h2>
+                <div class="product-grid" id="supplierProducts">
+                    <!-- Products will be populated by JavaScript -->
+                </div>
+            </div>
+
+            <!-- Performance Metrics -->
+            <div class="metrics-grid">
+                <div class="metric-card">
+                    <h3>Delivery Rate</h3>
+                    <p class="metric-value" id="deliveryRate">98%</p>
+                </div>
+                <div class="metric-card">
+                    <h3>Active Products</h3>
+                    <p class="metric-value" id="activeProducts">24</p>
+                </div>
+                <div class="metric-card">
+                    <h3>Pending Orders</h3>
+                    <p class="metric-value" id="pendingOrderCount">5</p>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Add/Edit Product Modal -->
+    <div id="productModal" class="modal">
+        <!-- Modal content same as inventory.html -->
+    </div>
+
+    <script src="script.js"></script>
+    <script>
+        function initializeSupplierDashboard() {
+            const session = validateSession();
+            if (!session || session.role !== 'supplier') {
+                window.location.href = 'login.html';
+                return;
+            }
+
+            populateMenu(session.role);
+            loadSupplierProducts();
+            loadPendingOrders();
+            updateMetrics();
+        }
+
+        function loadSupplierProducts() {
+            const products = JSON.parse(localStorage.getItem('products')) || [];
+            const supplierId = getCurrentUserId();
+            const supplierProducts = products.filter(p => p.supplierId === supplierId);
+
+            const productGrid = document.getElementById('supplierProducts');
+            productGrid.innerHTML = supplierProducts.map(product => `
+                <div class="product-card">
+                    <img src="${product.image || 'placeholder.png'}" alt="${product.name}">
+                    <div class="product-info">
+                        <h3>${product.name}</h3>
+                        <p>Stock: ${product.stock}</p>
+                        <p>Price: $${product.price}</p>
+                        <div class="product-actions">
+                            <button onclick="editProduct(${product.id})" class="btn-icon">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <button onclick="deleteProduct(${product.id})" class="btn-icon">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `).join('') || '<p>No products found</p>';
+        }
+
+        function loadPendingOrders() {
+            const orders = JSON.parse(localStorage.getItem('orders')) || [];
+            const supplierId = getCurrentUserId();
+            const pendingOrders = orders.filter(o => 
+                o.supplierId === supplierId && o.status === 'pending'
+            );
+
+            const ordersList = document.getElementById('pendingOrders');
+            ordersList.innerHTML = pendingOrders.map(order => `
+                <div class="order-card">
+                    <div class="order-info">
+                        <h4>Order #${order.id}</h4>
+                        <p>${order.items.length} items</p>
+                        <p>Requested: ${new Date(order.timestamp).toLocaleDateString()}</p>
+                    </div>
+                    <div class="order-actions">
+                        <button onclick="viewOrderDetails(${order.id})" class="btn-small">
+                            View Details
+                        </button>
+                        <button onclick="processOrder(${order.id})" class="btn-small btn-primary">
+                            Process Order
+                        </button>
+                    </div>
+                </div>
+            `).join('') || '<p>No pending orders</p>';
+        }
+
+        function updateMetrics() {
+            // Implementation for updating supplier metrics
+            const metrics = calculateSupplierMetrics(getCurrentUserId());
+            document.getElementById('deliveryRate').textContent = metrics.deliveryRate + '%';
+            document.getElementById('activeProducts').textContent = metrics.activeProducts;
+            document.getElementById('pendingOrderCount').textContent = metrics.pendingOrders;
+        }
+
+        // Add this function after the initializeSupplierDashboard function
+        function populateMenu(role) {
+            const menu = document.querySelector('.nav-menu ul');
+            if (!menu) return;
+
+            const menuItems = {
+                supplier: [
+                    { id: 'dashboard', icon: 'fas fa-home', text: 'Dashboard' },
+                    { id: 'products', icon: 'fas fa-boxes', text: 'My Products' },
+                    { id: 'orders', icon: 'fas fa-shopping-cart', text: 'Supply Orders' },
+                    { id: 'logout', icon: 'fas fa-sign-out-alt', text: 'Logout', onclick: 'logout()' }
+                ]
+            };
+
+            const items = menuItems[role] || [];
+            menu.innerHTML = items.map(item => `
+                <li>
+                    <a href="#" ${item.onclick ? `onclick="${item.onclick}"` : `onclick="showSection('${item.id}')"`}>
+                        <i class="${item.icon}"></i> ${item.text}
+                    </a>
+                </li>
+            `).join('');
+        }
+
+        // Add this function for showing sections
+        function showSection(sectionId) {
+            document.querySelectorAll('.dashboard-section').forEach(section => {
+                section.style.display = 'none';
+            });
+
+            const selectedSection = document.getElementById(sectionId);
+            if (selectedSection) {
+                selectedSection.style.display = 'block';
+            }
+        }
+
+        // Add other necessary functions...
+    </script>
+</body>
+</html> 
